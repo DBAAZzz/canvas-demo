@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo1</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    #canvas {
+        background: red;
+    }
+</style>
+
+<body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+</body>
+<script>
+    function imgLoad(img, ctx) {
+        return new Promise((resolve, reject) => {
+            img.onload = () => {
+                ctx.drawImage(img, 50, 50, 200, 200, 0, 0, 100, 100)
+                resolve()
+            }
+        })
+    }
+    async function draw() {
+        /** @type {HTMLCanvasElement} */
+
+        let canvas = document.getElementById('canvas')
+        var ctx = canvas.getContext('2d')
+
+        /* 开始绘制矩形 */
+        ctx.beginPath()
+
+        ctx.strokeStyle = 'yellow'
+        ctx.moveTo(300, 0)
+
+        ctx.lineTo(600, 300)
+        ctx.lineTo(300, 600)
+        ctx.lineTo(0, 300)
+        ctx.lineTo(300, 0)
+        ctx.stroke()
+
+        ctx.save()
+
+        /* 开始绘制圆形 */
+        ctx.beginPath()
+        ctx.strokeStyle = 'green'
+        ctx.arc(300, 300, 300, 0, Math.PI * 2)
+
+        ctx.stroke()
+        ctx.save()
+
+        /* 开始绘制DBAA字体 */
+        ctx.strokeStyle = 'black'
+        ctx.font = '50px sans-serif'
+        ctx.textAlign = 'center'
+        ctx.fillText('DBAA', 300, 300)
+        ctx.save()
+
+        /**
+         * 设置遮罩
+         * 裁切路径的作用是遮罩。只显示裁切路径内的区域，裁切路径外的区域会被隐藏。
+         */
+
+        ctx.beginPath()
+
+        ctx.arc(50, 50, 50, 0, Math.PI * 2)
+
+        ctx.clip()
+
+        /* 绘制图片 */
+        var img = new Image()
+        img.src = './1.jpg'
+
+        ctx.save()
+
+        await imgLoad(img, ctx)
+
+
+
+        ctx.save()
+
+    }
+
+    draw()
+
+
+
+
+</script>
+
+
+
+</html>
